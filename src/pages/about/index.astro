@@ -1,0 +1,95 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ScrubHero from "@/components/ScrubHero.astro";
+import { site } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+
+/* Verbatim from blackandbluesteakhouse.ca/toronto-about/ */
+const highlights = [
+  ["Dry-Aged Beef (28 – 45 days)", "all beef is dry-aged in a one-of-a-kind Himalayan salt-lined meat locker, where guests can receive an interactive experience with a Black+Blue butcher to learn more about the restaurant’s unique steak program"],
+  ["Kobe Beef Certified", "one of the only license holders in Canada to sell certified Japanese Kobe Beef"],
+  ["Japanese A5 Wagyu", "including the ultra-premium Miyazaki Wagyu"],
+  ["Canada and USDA Prime", "Canadian and US prime-grade beef creating the most tender and juicy cuts of beef"],
+  ["Seasonal Seafood, Raw Bar and Caviar", "from seafood platters to seasonal oysters and the freshest of sushi, to Osetra and Beluga caviar"],
+  ["Classic Steakhouse Starters and Sides (with a twist)", "from tableside caesar to creamed spinach and mac and cheese sticks, to the fully loaded B+B Millionaire Potato with crème fraiche, taleggio cheese and shaved black truffle"],
+];
+const policies = [
+  ["Dress Code", "At all Glowbal Group restaurants, with the exception of Trattoria’s, we encourage business casual attire. Please note we will not deny entrance to any patron, but at management’s discretion may ask guests to remove ballcaps in the dining room, for example. If a guest is not comfortable with this, we invite them to join us on our beautiful patio where more casual attire is welcome."],
+  ["Families", "Glowbal Group is a family company and small children are always welcome. We offer highchairs on request although quantity can be limited. For children comfortable and accustomed to dining in restaurants, we offer menus selections just for kids and change tables in our restrooms. For children who become uncomfortable or unsettled during a visit, at our management’s discretion, we may ask parents or guardians to relocate a child to a quiet space until they have become settle and comfortable in the restaurant."],
+  ["Changes In Family Size", "All Glowbal Group restaurants enjoy accommodating groups of friends, families and business associates. If your party size unexpectedly changes, smaller groups may be asked to relocated to a smaller table. Groups that grow in number may need to sit separately or wait in a holding area until appropriate space becomes available. We understand that groups are often happy to squeeze into crowded areas but we try to consider the comfort of all diners when seating the dining room. Overcrowding and boisterous (loud) groups can impact other diners and at our management’s discretion, we may alert parties that are impacting other groups."],
+];
+const press = [
+  ["Toronto Life", "What’s on the menu at Black and Blue, a two-storey, 9,000-square-foot steakhouse in the old Toronto Stock Exchange space", "https://torontolife.com/food/whats-on-the-menu-at-black-and-blue-a-two-storey-9000-square-foot-steakhouse-in-the-old-toronto-stock-exchange-space/"],
+  ["blogTO", "Black + Blue Toronto", "https://www.blogto.com/restaurants/black-blue-steakhouse-toronto/"],
+  ["Daily Hive", "Black+Blue: Vancouver steakhouse opening in Toronto", "https://dailyhive.com/vancouver/black-blue-steakhouse-toronto"],
+  ["Streets of Toronto", "Toronto’s financial district is now home to a swanky new steak house", "https://streetsoftoronto.com/torontos-financial-district-is-now-home-to-a-swanky-new-steak-house/"],
+];
+const schema = [{
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "About", item: absolute("about/") },
+  ],
+}];
+---
+<Layout
+  title="About Black+Blue Toronto | The Golden Age of Steak"
+  description="Black+Blue Toronto: dry-aged beef, certified Kobe, A5 Wagyu, raw bar and caviar at 130 King St West. Dress code, families, virtual tour and press."
+  path="about/"
+  current="about"
+  schema={schema}
+>
+<main class="page">
+  <ScrubHero id="about-hero" frames="frames/facade/fa_" poster="assets/img/facade.webp" label="The Black+Blue sign on King St West, from afternoon to night as the gold letters light up">
+    <div>
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>About</nav>
+      <h1 style="margin-top:1rem">Welcome! <em>The Golden Age of Steak</em></h1>
+    </div>
+    <div>
+      <p class="lede">Black+Blue is Canada’s premier steak dining experience with locations in Vancouver and Toronto offering the magic of a classic steak house combined with a modern and energetic ambiance.</p>
+      <div class="actions"><a class="btn btn-sm" href={site.tour}>Virtual Tour</a><a class="link-arrow" href={site.book}>Book a Table</a></div>
+    </div>
+  </ScrubHero>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal"><div><span class="eyebrow">Black+Blue Toronto</span><h2>Highlights <em>include…</em></h2></div><p>Black+Blue Toronto focuses on classic steakhouse offerings with a twist, and the world’s most premium cuts of meat.</p></div>
+      <div class="index-grid reveal">
+        {highlights.map(([t, d], i) => <div><span class="eyebrow">{String(i + 1).padStart(2, "0")}</span><strong>{t}</strong><span>{d}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split flip">
+      <figure class="print reveal"><img src={url("assets/img/dining-room.webp")} alt="The main dining room with the white bull mural and the olive tree" loading="lazy" width="1600" height="1067" /></figure>
+      <div class="reveal">
+        <span class="eyebrow">The room</span>
+        <h2>Two storeys at <em>130 King St West</em></h2>
+        <p>The main floor of the restaurant is fully accessible, including both entrances, the garden patio and access to restrooms. The second-floor mezzanine can be accessed by stairs only.</p>
+        <p>We anticipate 2.5 – 3 hours of service for a full seated dinner.</p>
+        <div class="actions"><a class="btn" href={site.tour}>Virtual Tour</a><a class="link-arrow" href={url("private-dining/")}>Private Dining</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="policies">
+    <div class="wrap">
+      <div class="section-head reveal"><div><span class="eyebrow">Before you visit</span><h2>About</h2></div></div>
+      <div class="faq">
+        {policies.map(([t, d]) => <details><summary>{t}</summary><div class="answer"><p>{d}</p></div></details>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="press">
+    <div class="wrap">
+      <div class="section-head reveal"><div><span class="eyebrow">Press</span><h2>In the <em>papers</em></h2></div></div>
+      <div class="dish-grid reveal">
+        {press.map(([src, t, href]) => <a href={href} rel="noopener"><span class="eyebrow">{src}</span><strong>{t}</strong></a>)}
+      </div>
+      <p class="micro" style="margin-top:1.4rem">Links open the original articles.</p>
+    </div>
+  </section>
+</main>
+</Layout>

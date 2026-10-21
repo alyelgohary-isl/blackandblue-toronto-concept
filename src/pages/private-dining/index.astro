@@ -1,0 +1,122 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ScrubHero from "@/components/ScrubHero.astro";
+import { site } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+import { faq } from "@/data/faq";
+
+const groupMenus = "https://blackandbluesteakhouse.ca/wp-content/uploads/2026/09/BB-TO-Group-Menus-2026-5.pdf";
+const schema = [
+  {
+    "@context": "https://schema.org", "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a.join(" ") } })),
+  },
+  {
+    "@context": "https://schema.org", "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+      { "@type": "ListItem", position: 2, name: "Private Dining", item: absolute("private-dining/") },
+    ],
+  },
+];
+---
+<Layout
+  title="Private Dining & Group Events in Toronto | Black+Blue"
+  description="Private rooms for 16 and 32 guests, a mezzanine and garden patio, and full buyouts for up to 350 at Black+Blue, 130 King St West, Toronto. Group menus and event FAQ."
+  path="private-dining/"
+  current="private"
+  schema={schema}
+>
+<main class="page">
+  <ScrubHero id="private-hero" frames="frames/private/pv_" poster="assets/img/private-room.webp" label="The camera moves slowly down the long private dining table toward the wine wall">
+    <div>
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Private Dining</nav>
+      <h1 style="margin-top:1rem">Events & <em>Private Dining</em></h1>
+    </div>
+    <div>
+      <p class="lede">Intimate private rooms for up to 16 and 32 guests, versatile mezzanine and garden patio options for larger gatherings, and full restaurant buyouts accommodating up to 350 guests.</p>
+      <div class="actions"><a class="btn btn-solid btn-sm" href="#inquiry">Event Request</a><a class="link-arrow" href={groupMenus}>Group Menus</a></div>
+    </div>
+  </ScrubHero>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div><span class="eyebrow">The rooms</span><h2>A variety of elegant <em>dining spaces</em></h2></div>
+        <div>
+          <p>Welcome to Black+Blue Toronto, Canada’s premier steak dining experience. Our restaurant blends the classic charm of a traditional steakhouse with a modern, energetic ambiance. We take great pride in being one of the few Kobe-Beef certified restaurants in Canada and offer an exquisite selection of the world’s most premium cuts of steak.</p>
+          <p style="margin-top:1rem">We look forward to welcoming you to Black+Blue Toronto.</p>
+        </div>
+      </div>
+      <div class="rooms reveal">
+        <div><span class="figure">16</span><span class="label">Intimate private room</span></div>
+        <div><span class="figure">32</span><span class="label">Private room</span></div>
+        <div><span class="figure">Mezzanine</span><span class="label">& garden patio, for larger gatherings</span></div>
+        <div><span class="figure">350</span><span class="label">Full restaurant buyout</span></div>
+      </div>
+      <!-- CONFIRM: capacities of the mezzanine and garden patio, and which room seats 16 vs 32 -->
+      <div class="actions" style="margin-top:2rem">
+        <a class="link-arrow" href={groupMenus}>Group Menus</a>
+        <a class="link-arrow" href="https://glowbalgroup.com/holiday-events/toronto/black-blue/">Festive Info</a>
+        <a class="link-arrow" href={site.tour}>Virtual Tour</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="gallery">
+        <figure class="print wide reveal"><img src={url("assets/img/long-table.webp")} alt="The long private table with red velvet chairs" loading="lazy" width="1600" height="1068" /></figure>
+        <figure class="print reveal"><img src={url("assets/img/tree-room.webp")} alt="The olive tree and booths in the main dining room" loading="lazy" width="1100" height="1758" /></figure>
+        <figure class="print reveal"><img src={url("assets/img/patio.webp")} alt="The garden patio room under hanging greenery" loading="lazy" width="1600" height="1067" /></figure>
+        <figure class="print wide reveal"><img src={url("assets/img/room.webp")} alt="The main dining room and bar at Black+Blue Toronto" loading="lazy" width="900" height="600" /></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="inquiry">
+    <div class="wrap form-layout">
+      <div class="sticky reveal">
+        <span class="eyebrow">Event Request</span>
+        <h2 class="h2" style="margin:1rem 0 1.4rem">Plan a <em>group dinner</em></h2>
+        <p class="ink-soft">A Group Set Menu is required for all groups of 10 guests and larger. Tell us the date, the size of your party and the room you have in mind, and our events team will reply with availability and the minimum spend for that day.</p>
+        <!-- CONFIRM: reply time the events team stands behind -->
+        <dl class="contact-details" style="margin-top:2rem">
+          <div><dt>Events</dt><dd><a href={site.events}>Request through Tripleseat</a></dd></div>
+          <div><dt>Call</dt><dd><a href={site.tel}>{site.phone}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+        </dl>
+      </div>
+      <div>
+        <form class="form reveal" method="post" data-form="private-dining" data-form-type="private_event">
+          <div class="row"><div class="field"><label for="pd_name">Name*</label><input id="pd_name" name="name" type="text" autocomplete="name" required /></div><div class="field"><label for="pd_company">Company</label><input id="pd_company" name="company" type="text" autocomplete="organization" /></div></div>
+          <div class="row"><div class="field"><label for="pd_email">Email*</label><input id="pd_email" name="email" type="email" autocomplete="email" required /></div><div class="field"><label for="pd_phone">Phone*</label><input id="pd_phone" name="phone" type="tel" autocomplete="tel" required /></div></div>
+          <div class="row"><div class="field"><label for="pd_date">Preferred date*</label><input id="pd_date" name="date" type="date" required /></div><div class="field"><label for="pd_guests">Guests*</label><input id="pd_guests" name="guests" type="number" min="2" max="350" required /></div></div>
+          <div class="row">
+            <div class="field"><label for="pd_occasion">Occasion</label><select id="pd_occasion" name="occasion"><option value="">Select…</option><option>Corporate holiday party</option><option>Team dinner</option><option>Client reception</option><option>Holiday lunch</option><option>Birthday or anniversary</option><option>Other</option></select></div>
+            <div class="field"><label for="pd_space">Space</label><select id="pd_space" name="space"><option value="">Select…</option><option>Private room (up to 16)</option><option>Private room (up to 32)</option><option>Mezzanine</option><option>Garden patio</option><option>Full buyout (up to 350)</option><option>Not sure yet</option></select></div>
+          </div>
+          <div class="field"><label for="pd_message">Anything else</label><textarea id="pd_message" name="message" placeholder="Time, dietary needs, A/V, a cake…"></textarea></div>
+          <button class="btn btn-solid btn-lg" type="submit">Send event request</button>
+          <p class="micro recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+        </form>
+        <div class="form-success"><h3>Thank you.</h3><p>Your event request is with the Black+Blue Toronto events team.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="section-head reveal"><div><span class="eyebrow">Event FAQ</span><h2>Before you <em>book</em></h2></div><p>The final guaranteed guest count is required 72 hours prior to your event; menu and beverage selections 2 weeks prior.</p></div>
+      <div class="faq">
+        {faq.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <div class="answer">{f.a.map((p) => <p>{p}</p>)}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

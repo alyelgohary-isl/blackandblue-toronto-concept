@@ -1,0 +1,11 @@
+---
+/* Mobile action bar: the four things a guest does from a phone. */
+import { site } from "../site.config";
+import { url } from "../lib/url";
+---
+<nav class="action-bar" aria-label="Quick actions">
+  <a href={site.book}>Book</a>
+  <a href={url("menu/")}>Menu</a>
+  <a href={site.tel}>Call</a>
+  <a href={site.maps}>Directions</a>
+</nav>

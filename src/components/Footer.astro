@@ -1,0 +1,51 @@
+---
+import { site } from "../site.config";
+import { url } from "../lib/url";
+
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <img class="footer-logo" src={url("assets/brand/logo-toronto.png")} alt="Black+Blue Toronto" width="150" height="125" loading="lazy" />
+      <p class="footer-line">A Kobe-Beef Certified Restaurant</p>
+    </div>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3>Visit</h3>
+        <address>{site.address.street}<br />{site.address.city}, {site.address.region}, {site.address.postal}</address>
+        <p><a href={site.tel}>{site.phone}</a><br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <a class="link-arrow" href={site.maps}>Directions</a>
+      </div>
+      <div class="footer-col">
+        <h3>Hours</h3>
+        <dl class="hours-mini">
+          {site.hours.map((h) => <div><dt>{h.label}</dt><dd>{h.days}<br />{h.time}</dd></div>)}
+        </dl>
+      </div>
+      {site.footer.columns.map((col) => (
+        <div class="footer-col">
+          <h3>{col.title}</h3>
+          <ul>
+            {col.links.map((link) => <li><a href={url(link.href)}>{link.label}</a></li>)}
+          </ul>
+        </div>
+      ))}
+      <div class="footer-col footer-news">
+        <h3>Newsletter</h3>
+        <p>{site.footer.newsletter}</p>
+        <form class="news-form" data-form="newsletter" data-form-type="newsletter">
+          <label class="visually-hidden" for="news-email">Email</label>
+          <input id="news-email" type="email" name="email" placeholder="Email address" required />
+          <button class="btn btn-sm" type="submit">Sign up</button>
+        </form>
+        <div class="form-success"><p>You're on the list.</p></div>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <p>&copy; {year} Black+Blue. {site.footer.legal}</p>
+      <p class="concept">Concept preview, not the live site. <a href={url("legal/")}>Legal</a></p>
+      <img src={url("assets/brand/glowbal.png")} alt="Glowbal Restaurant Group" width="200" height="34" loading="lazy" class="glowbal" />
+    </div>
+  </div>
+</footer>

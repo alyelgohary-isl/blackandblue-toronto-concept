@@ -1,0 +1,13 @@
+# Old Toronto URLs on blackandbluesteakhouse.ca → this site (Netlify / Cloudflare Pages)
+/toronto-home/  /  301
+/toronto-menu/  /menu/  301
+/toronto-about/  /about/  301
+/toronto-contact/  /contact/  301
+/toronto-private-dining/  /private-dining/  301
+/toronto-a-superior-selection/  /superior-selection/  301
+/toronto-event-faq/  /private-dining/#faq  301
+/toronto-3d-tour/  /about/  301
+/grand-opening-photos/  /about/#press  301
+/fathers-day-bbq-kit/  /menu/  301
+/location/toronto/  /  301
+/wp-content/uploads/2025/02/bb-to-Wellington-Mondays-2024.pdf  /menu/  301
