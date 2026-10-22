@@ -1,0 +1,80 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import LoopHero from "@/components/LoopHero.astro";
+import { url, absolute } from "@/lib/url";
+import { locations, type Location } from "@/data/locations";
+
+export function getStaticPaths() {
+  return locations.map((loc) => ({ params: { loc: loc.slug }, props: { loc } }));
+}
+const { loc } = Astro.props as { loc: Location };
+const hero = loc.heroes.contact!;
+const path = `${loc.slug}/contact/`;
+const schema = [{ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+  { "@type": "ListItem", position: 1, name: loc.name, item: absolute(`${loc.slug}/`) },
+  { "@type": "ListItem", position: 2, name: "Contact", item: absolute(path) },
+] }];
+const addr = `${loc.address.street}, ${loc.address.city}, ${loc.address.region} ${loc.address.postal}`;
+---
+<Layout
+  title={`Contact & Hours | ${loc.name}, ${loc.address.street}`.slice(0, 64)}
+  description={`${loc.name} hours, phone, email, parking and directions: ${addr} · ${loc.phone}.`}
+  path={path} current="contact" schema={schema} loc={loc}
+>
+<main class="page">
+  <LoopHero loop={hero.loop} label={hero.label}>
+    <div>
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url(`${loc.slug}/`)}>{loc.short}</a><span>/</span>Contact</nav>
+      <h1 style="margin-top:1rem">{hero.title[0]} <em>{hero.title[1]}</em></h1>
+    </div>
+    <div>
+      <p class="lede">{loc.address.line2 && <>{loc.address.line2} · </>}{addr} · <a href={loc.tel}>{loc.phone}</a> · <a href={`mailto:${loc.email}`}>{loc.email}</a></p>
+      <div class="actions"><a class="btn btn-solid btn-sm" href={loc.book}>Book a Table</a><a class="link-arrow" href={url(`${loc.slug}/private-dining/#inquiry`)}>Event Request</a></div>
+    </div>
+  </LoopHero>
+
+  <section class="section">
+    <div class="wrap visit">
+      <div class="reveal">
+        <h3>Contact</h3>
+        <address>{loc.address.line2 && <>{loc.address.line2}<br /></>}{loc.address.street}<br />{loc.address.city}, {loc.address.region} {loc.address.postal}</address>
+        <p style="margin-top:1rem"><a class="tel-big" href={loc.tel}>{loc.phone}</a><br /><a href={`mailto:${loc.email}`}>{loc.email}</a></p>
+        <div class="actions"><a class="btn" href={loc.maps}>Directions</a><a class="link-arrow" href="https://www.buyatab.com/gcp/accessible/?id=5194#customize">Gift Cards</a></div>
+      </div>
+      <div class="reveal">
+        <h3>Hours</h3>
+        <dl class="hours">{loc.hours.map((x) => <div><dt>{x.label}</dt><dd>{x.days}<span>{x.time}</span></dd></div>)}</dl>
+        <!-- CONFIRM: upcoming holiday closures -->
+      </div>
+      <div class="reveal">
+        <h3>Parking</h3>
+        <div class="prose">{loc.visit.parking.map((p) => <p style="font-size:0.92rem">{p}</p>)}</div>
+        <p class="micro" style="margin-top:1.2rem">{loc.visit.access}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="form">
+    <div class="wrap form-layout">
+      <div class="sticky reveal">
+        <span class="eyebrow">Write to us</span>
+        <h2 class="h2" style="margin:1rem 0 1.4rem">Send a <em>message</em></h2>
+        <p class="ink-soft">{loc.contactNote}</p>
+      </div>
+      <div>
+        <form class="form reveal" method="post" data-form={`contact-${loc.slug}`} data-form-type="contact">
+          <input type="hidden" name="location" value={loc.name} />
+          <div class="row"><div class="field"><label for="c_name">Name*</label><input id="c_name" name="name" type="text" autocomplete="name" required /></div><div class="field"><label for="c_phone">Phone</label><input id="c_phone" name="phone" type="tel" autocomplete="tel" /></div></div>
+          <div class="field"><label for="c_email">Email*</label><input id="c_email" name="email" type="email" autocomplete="email" required /></div>
+          <div class="field"><label for="reason">About*</label><select id="reason" name="reason" required><option value="" disabled selected>Select…</option><option>A recent visit</option><option>Gift cards</option><option>Media & press</option><option>Something else</option></select></div>
+          <div class="field"><label for="c_message">Message*</label><textarea id="c_message" name="message" required></textarea></div>
+          <label class="check"><input type="checkbox" name="consent" value="yes" /> <span>Yes, I’d like to receive news, wine dinners and features by email. I can unsubscribe at any time.</span></label>
+          <button class="btn btn-solid btn-lg" type="submit">Send message</button>
+          <p class="micro recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+        </form>
+        <div class="form-success"><h3>Thank you.</h3><p>Your message is with the {loc.name} team.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

@@ -1,0 +1,102 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import LoopHero from "@/components/LoopHero.astro";
+import { url, absolute, locHref } from "@/lib/url";
+import { locations, type Location } from "@/data/locations";
+
+export function getStaticPaths() {
+  return locations.filter((l) => l.pages.includes("about")).map((loc) => ({ params: { loc: loc.slug }, props: { loc } }));
+}
+const { loc } = Astro.props as { loc: Location };
+const hero = loc.heroes.about!;
+const about = loc.about!;
+const path = `${loc.slug}/about/`;
+const schema = [{ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+  { "@type": "ListItem", position: 1, name: loc.name, item: absolute(`${loc.slug}/`) },
+  { "@type": "ListItem", position: 2, name: "About", item: absolute(path) },
+] }];
+---
+<Layout
+  title={`About ${loc.name} | The Golden Age of Steak`}
+  description={`${loc.name}, ${loc.address.street}: dry-aged beef, certified Kobe and A5 Wagyu. Dress code, families, virtual tour${about.press ? " and press" : ""}.`}
+  path={path} current="about" schema={schema} loc={loc}
+>
+<main class="page">
+  <LoopHero loop={hero.loop} label={hero.label}>
+    <div>
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url(`${loc.slug}/`)}>{loc.short}</a><span>/</span>About</nav>
+      <h1 style="margin-top:1rem">{hero.title[0]} <em>{hero.title[1]}</em></h1>
+    </div>
+    <div>
+      <p class="lede">{hero.lede}</p>
+      {hero.actions && <div class="actions">{hero.actions.map(([l, x], i) => <a class={i === 0 ? "btn btn-sm" : "link-arrow"} href={locHref(loc.slug, x)}>{l}</a>)}</div>}
+    </div>
+  </LoopHero>
+
+  {about.letter && (
+    <section class="section">
+      <div class="wrap-narrow letter reveal">
+        <span class="eyebrow">A letter</span>
+        {about.letter.body.map((p) => <p>{p}</p>)}
+        <p class="sign">{about.letter.sign.map((s) => <span>{s}</span>)}</p>
+      </div>
+    </section>
+  )}
+
+  {about.highlights && (
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head reveal"><div><span class="eyebrow">{loc.name}</span><h2>Highlights <em>include…</em></h2></div><p>Black+Blue Toronto focuses on classic steakhouse offerings with a twist, and the world’s most premium cuts of meat.</p></div>
+        <div class="index-grid reveal">
+          {about.highlights.map(([t, d], i) => <div><span class="eyebrow">{String(i + 1).padStart(2, "0")}</span><strong>{t}</strong><span>{d}</span></div>)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {about.room && (
+    <section class="section">
+      <div class="wrap split flip">
+        <figure class="print reveal"><img src={url(`assets/img/${about.room.img}.webp`)} alt={about.room.alt} loading="lazy" width="1600" height="1067" /></figure>
+        <div class="reveal">
+          <span class="eyebrow">{about.room.eyebrow}</span>
+          <h2>{about.room.title[0]} <em>{about.room.title[1]}</em></h2>
+          {about.room.body.map((p) => <p>{p}</p>)}
+          <div class="actions"><a class="btn" href={loc.tour}>Virtual Tour</a><a class="link-arrow" href={url(`${loc.slug}/private-dining/`)}>Private Dining</a></div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {loc.key === "vancouver" && (
+    <section class="section">
+      <div class="wrap split">
+        <figure class="print reveal"><img src={url("assets/img/roof-wide.webp")} alt="The Roof at Black+Blue" loading="lazy" width="1600" height="1067" /></figure>
+        <div class="reveal">
+          <span class="eyebrow">The Restaurant</span>
+          <h2>Rooftop dining <em>at its best</em></h2>
+          <p>The Roof, Black+Blue’s third floor outdoor restaurant and lounge, is Vancouver’s largest rooftop dining destination offering platinum seating to the city’s patio scene.</p>
+          <div class="actions"><a class="btn" href={url("the-roof/")}>Visit The Roof</a></div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" id="policies">
+    <div class="wrap">
+      <div class="section-head reveal"><div><span class="eyebrow">Before you visit</span><h2>About</h2></div></div>
+      <div class="faq">{about.policies.map(([t, d]) => <details><summary>{t}</summary><div class="answer"><p>{d}</p></div></details>)}</div>
+    </div>
+  </section>
+
+  {about.press && (
+    <section class="section" id="press">
+      <div class="wrap">
+        <div class="section-head reveal"><div><span class="eyebrow">Press</span><h2>In the <em>papers</em></h2></div></div>
+        <div class="dish-grid reveal">{about.press.map(([src, t, href]) => <a href={href} rel="noopener"><span class="eyebrow">{src}</span><strong>{t}</strong></a>)}</div>
+        <p class="micro" style="margin-top:1.4rem">Links open the original articles.</p>
+      </div>
+    </section>
+  )}
+</main>
+</Layout>

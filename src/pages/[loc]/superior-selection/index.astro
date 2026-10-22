@@ -1,0 +1,65 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import LoopHero from "@/components/LoopHero.astro";
+import { url, absolute } from "@/lib/url";
+import { locations, type Location } from "@/data/locations";
+
+export function getStaticPaths() {
+  return locations.filter((l) => l.pages.includes("selection")).map((loc) => ({ params: { loc: loc.slug }, props: { loc } }));
+}
+const { loc } = Astro.props as { loc: Location };
+const hero = loc.heroes.selection!;
+const path = `${loc.slug}/superior-selection/`;
+const lotHref = (l: string) => (l.startsWith("dishes/") ? url(l) : url(`${loc.slug}/${l}`));
+const schema = [{ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+  { "@type": "ListItem", position: 1, name: loc.name, item: absolute(`${loc.slug}/`) },
+  { "@type": "ListItem", position: 2, name: "A Superior Selection", item: absolute(path) },
+] }];
+---
+<Layout
+  title={`Dry-Aged Steak, Kobe & A5 Wagyu in ${loc.address.city} | ${loc.short === "The Roof" ? "The Roof" : "Black+Blue"}`}
+  description={`Dry-aged 28–45 days in a Himalayan salt-brick locker: Canadian Prime, Japanese A5 Wagyu and certified Kobe beef at ${loc.name}, ${loc.address.street}.`}
+  path={path} current="selection" schema={schema} loc={loc}
+>
+<main class="page">
+  <LoopHero loop={hero.loop} label={hero.label}>
+    <div>
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url(`${loc.slug}/`)}>{loc.short}</a><span>/</span>A Superior Selection</nav>
+      <h1 style="margin-top:1rem">{hero.title[0]} <em>{hero.title[1]}</em></h1>
+    </div>
+    <div><p class="lede">{hero.lede}</p></div>
+  </LoopHero>
+
+  <section class="section">
+    <div class="wrap split">
+      <figure class="print reveal" style="aspect-ratio:4/5"><img src={url(`assets/img/${loc.key === "toronto" ? "salt-wall" : "van-locker"}.webp`)} alt="Dry-aging beef in front of the backlit Himalayan salt wall" loading="lazy" width="1078" height="1350" /></figure>
+      <div class="reveal">
+        <span class="eyebrow">The salt locker · 28 – 45 days</span>
+        <h2>Dry-aged in <em>Himalayan salt</em></h2>
+        {loc.selection.intro.map((p) => <p>{p}</p>)}
+        <div class="actions"><a class="btn btn-solid" href={loc.book}>Book a Table</a><a class="link-arrow" href={url("dishes/dry-aged-steak/")}>What is dry-aged steak?</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal"><div><span class="eyebrow">The selection</span><h2>Four lots, <em>by the cut</em></h2></div><p>Kobe Beef Certified: one of the only license holders in Canada to sell certified Japanese Kobe Beef.</p></div>
+      <div class="lots">
+        {loc.selection.lots.map((l) => (
+          <article class="lot-entry reveal" style={!l.img ? "grid-template-columns:1fr" : undefined}>
+            {l.img && <figure class="print"><img src={url(`assets/img/${l.img}.webp`)} alt={l.alt} loading="lazy" width="1000" height="1000" /></figure>}
+            <div style={!l.img ? "max-width:760px" : undefined}>
+              <span class="eyebrow">{l.no} · {l.where}</span>
+              <h2>{l.title}</h2>
+              <p>{l.body}</p>
+              <dl class="lot-spec">{l.spec.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+              <div class="actions" style="margin-top:1.6rem"><a class="link-arrow" href={lotHref(l.link)}>{l.link.startsWith("dishes") ? "Read more" : "Dinner menu"}</a></div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

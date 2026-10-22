@@ -9,7 +9,7 @@ export type Dish = {
 export const dishes: Dish[] = [
   {
     slug: "kobe-beef", name: "Japanese Kobe Beef", question: "What is Kobe beef, and where can you eat it in Toronto?",
-    answer: "Kobe beef is Wagyu from Tajima cattle raised in Hyogo Prefecture, Japan, sold only through certified members of the Kobe Beef Marketing & Distribution Promotion Association; in Toronto, Black+Blue on King St West is a certified Kobe-Beef restaurant.",
+    answer: "Kobe beef is Wagyu from Tajima cattle raised in Hyogo Prefecture, Japan, sold only through certified members of the Kobe Beef Marketing & Distribution Promotion Association; Black+Blue in Toronto and Vancouver are certified Kobe-Beef restaurants.",
     img: "kobe", alt: "Certified Kobe beef striploin beside its bronze certificate in the Black+Blue salt locker",
     body: [
       "Kobe is not a breed but a protected name. To carry it, the beef has to come from Tajima-strain Japanese Black cattle born, raised and processed in Hyogo Prefecture and meet strict marbling and quality thresholds. Restaurants that sell it are licensed and display a bronze bull and a numbered certificate.",
@@ -25,7 +25,7 @@ export const dishes: Dish[] = [
   },
   {
     slug: "a5-wagyu", name: "Japanese A5 Wagyu", question: "What does A5 Wagyu mean?",
-    answer: "A5 is the top grade in the Japanese beef grading system: “A” for the highest yield and “5” for the highest quality, which requires exceptional marbling; at Black+Blue every Japanese Wagyu cut is A5 with a marbling score of 8–10.",
+    answer: "A5 is the top grade in the Japanese beef grading system: “A” for the highest yield and “5” for the highest quality, which requires exceptional marbling; at Black+Blue, in Toronto and Vancouver, every Japanese Wagyu cut is A5 with a marbling score of 8–10.",
     img: "striploin", alt: "A5 Wagyu striploin with dense white marbling",
     body: [
       "Japanese beef is graded on two scales. The letter (A to C) measures how much usable meat the carcass yields; the number (1 to 5) measures quality: marbling, colour, firmness and the fat itself. A5 is the best of both.",
@@ -41,7 +41,7 @@ export const dishes: Dish[] = [
   },
   {
     slug: "dry-aged-steak", name: "Dry-Aged Beef", question: "What is dry-aged steak?",
-    answer: "Dry-aged steak is beef rested uncovered in a cold, controlled locker for weeks, so moisture evaporates and natural enzymes tenderise the meat; at Black+Blue every steak is dry-aged 28–45 days in a Himalayan salt-brick locker in the centre of the dining room.",
+    answer: "Dry-aged steak is beef rested uncovered in a cold, controlled locker for weeks, so moisture evaporates and natural enzymes tenderise the meat; at Black+Blue, in Toronto and Vancouver, every steak is dry-aged 28–45 days in a Himalayan salt-brick locker in the dining room.",
     img: "locker", alt: "Prime rib roasts dry-aging in front of the backlit Himalayan salt wall at Black+Blue",
     body: [
       "Fresh beef is mostly water. Hung on open racks at just above freezing, with air moving around it, a whole cut slowly loses moisture and concentrates; the meat’s own enzymes break down connective tissue at the same time. The result is a firmer, beefier, nuttier steak that is noticeably more tender.",
@@ -73,7 +73,7 @@ export const dishes: Dish[] = [
   },
   {
     slug: "beef-wellington", name: "Beef Wellington", question: "What is Beef Wellington?",
-    answer: "Beef Wellington is a centre-cut beef tenderloin wrapped in mushroom duxelles and puff pastry, baked and carved into thick slices; at Black+Blue it is served for two at 169, and as a three-course dinner on Wellington Mondays.",
+    answer: "Beef Wellington is a centre-cut beef tenderloin wrapped in mushroom duxelles and puff pastry, baked and carved into thick slices; at Black+Blue Toronto it is served for two at 169 (and on Wellington Mondays), and Black+Blue Vancouver serves it at 74.",
     img: "wellington", alt: "Beef Wellington cut to show the pink tenderloin, duxelles and puff pastry",
     body: [
       "The tenderloin is seared, spread with duxelles (finely chopped mushrooms cooked down with shallots and butter), wrapped in a thin crêpe or ham to keep the pastry crisp, then enclosed in puff pastry and baked until the pastry is deep gold and the beef is pink.",
@@ -89,7 +89,7 @@ export const dishes: Dish[] = [
   },
   {
     slug: "prime-rib", name: "Prime Rib", question: "What is prime rib?",
-    answer: "Prime rib is a standing rib roast of beef, slow-roasted on the bone and carved into thick slices, traditionally with jus and Yorkshire pudding; at Black+Blue a 14oz cut is 78, and Prime Rib Sundays are $69 for three courses.",
+    answer: "Prime rib is a standing rib roast of beef, slow-roasted on the bone and carved into thick slices, traditionally with jus and Yorkshire pudding; at Black+Blue a 14oz cut is 78 in Toronto and 73 in Vancouver, with three-course prime rib dinners every Sunday in both.",
     img: "prime-rib", alt: "Jus poured over a slice of prime rib with Yorkshire pudding",
     body: [
       "The name comes from the rib primal, the section of the animal the roast is cut from. It is roasted slowly and whole so the centre stays evenly pink from edge to edge, then rested and sliced to order.",
@@ -105,7 +105,7 @@ export const dishes: Dish[] = [
   },
   {
     slug: "seafood-tower", name: "Seafood Tower", question: "What is on a seafood tower?",
-    answer: "A seafood tower is a tiered platter of chilled shellfish served on ice; at Black+Blue the Seafood Tower (250) has east coast oysters, colossal shrimp, Dungeness crab, Atlantic lobster, king crab and marinated mussels and clams, and the Deluxe (450) adds sushi.",
+    answer: "A seafood tower is a tiered platter of chilled shellfish served on ice; at Black+Blue Toronto the Seafood Tower (250) has east coast oysters, colossal shrimp, Dungeness crab, Atlantic lobster, king crab and marinated mussels and clams; Vancouver’s Chilled Seafood Platter is 275.",
     img: "seafood-tower", alt: "A three-tier seafood tower with oysters, lobster and sushi at Black+Blue",
     body: [
       "Towers come from the French plateau de fruits de mer: everything cold, cracked and ready to eat, stacked so a table can share it as the first course of a steakhouse dinner.",
@@ -121,7 +121,7 @@ export const dishes: Dish[] = [
   },
   {
     slug: "tomahawk-steak", name: "Tomahawk Steak", question: "What is a tomahawk steak?",
-    answer: "A tomahawk is a thick bone-in rib eye cut with the full rib bone left long and cleaned, so it looks like an axe; at Black+Blue the Prime Tomahawk is a butcher cut at market price, with daily availability from your server.",
+    answer: "A tomahawk is a thick bone-in rib eye cut with the full rib bone left long and cleaned, so it looks like an axe; at Black+Blue the Prime Tomahawk is a butcher cut at market price, with daily availability from your server; Vancouver also offers an Australian Wagyu Tomahawk.",
     img: "carve", alt: "A chef carving at the Black+Blue butcher board",
     body: [
       "It is a rib eye, the richest of the classic steaks, left on a rib bone that has been frenched (scraped clean) to its full length. Most weigh well over two pounds and are cooked slowly, rested and carved for the table.",
@@ -136,3 +136,15 @@ export const dishes: Dish[] = [
     ],
   },
 ];
+
+/* Vancouver and The Roof prices for the same cuts (blackandbluesteakhouse.ca/van-menu/ and /van-roof-menu/, 2026-10-22) */
+export const vanPrices: Record<string, [string, string][]> = {
+  "kobe-beef": [["Rib Eye", "52 per oz"], ["Striploin", "55 per oz"], ["Tenderloin", "68 per oz"]],
+  "a5-wagyu": [["Rib Eye", "32 per oz"], ["Striploin", "34 per oz"], ["Tenderloin", "42 per oz"], ["Wagyu Hot Stone (Happy Hour on The Roof)", "33"]],
+  "dry-aged-steak": [["Canadian Prime New York Striploin", "79 (12oz)"], ["Canadian Prime Tenderloin", "79 (8oz)"], ["Canadian Prime Rib-Eye", "112 (14oz)"], ["Cowboy Rib-Eye", "145 (24oz)"]],
+  "canadian-prime": [["New York Striploin", "79 (12oz)"], ["Tenderloin", "79 (8oz)"], ["Rib-Eye", "112 (14oz)"], ["Cowboy Rib-Eye", "145 (24oz)"], ["Steak & Frites (lunch, 10oz striploin)", "56"]],
+  "beef-wellington": [["Beef Wellington (Black+Blue Vancouver dinner)", "74"]],
+  "prime-rib": [["Slow Roasted Prime Rib (dinner)", "73 (14oz)"], ["Canadian Prime Rib Happy Hour, Mon – Sat 2:00 – 5:00pm", "$45"], ["Prime Rib Sunday Dinner, three courses", "$59"]],
+  "seafood-tower": [["Chilled Seafood Platter", "275"], ["Fresh Oysters", "28 doz 50 doz"], ["Feature Oysters (Happy Hour on The Roof)", "2.50 per"]],
+  "tomahawk-steak": [["Prime Butcher Cuts: Prime Tomahawk | Porterhouse | Australian Wagyu Tomahawk", "MP"], ["Cowboy Rib-Eye", "145 (24oz)"]],
+};

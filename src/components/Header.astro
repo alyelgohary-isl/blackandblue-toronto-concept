@@ -1,27 +1,46 @@
 ---
-import { site, type NavKey } from "../site.config";
+import type { Location } from "../data/locations";
+import { locations } from "../data/locations";
 import { url } from "../lib/url";
 
 interface Props {
-  /** Nav item marked aria-current="page" */
-  current?: NavKey;
+  loc?: Location;
+  /** Page marked aria-current="page" */
+  current?: string;
 }
-const { current } = Astro.props;
+const { loc, current } = Astro.props;
+const labels: Record<string, [string, string]> = {
+  menu: ["menu/", "Menu"], selection: ["superior-selection/", "A Superior Selection"], private: ["private-dining/", "Private Dining"],
+  about: ["about/", "About"], contact: ["contact/", "Contact"],
+};
+const nav = loc ? loc.pages.map((p) => ({ key: p, href: url(`${loc.slug}/${labels[p][0]}`), label: labels[p][1] })) : [];
+const home = loc ? url(`${loc.slug}/`) : url();
+const book = loc ? loc.book : locations[0].book;
 ---
 <header class="site-header">
-  <a class="brand" href={url()} aria-label="Black+Blue Toronto, home">
-    <img class="brand-mono" src={url("assets/brand/monogram.png")} alt="" width="121" height="120" />
-    <span class="brand-text"><img src={url("assets/brand/wordmark.png")} alt="Black+Blue" width="292" height="37" /><small>Toronto</small></span>
-  </a>
-  <nav class="site-nav" id="site-nav" aria-label="Primary">
-    {site.nav.map((item) => (
-      <a href={url(item.href)} aria-current={item.key === current ? "page" : undefined}>{item.label}</a>
-    ))}
-    <a class="nav-extra" href={site.tel}>{site.phone}</a>
-    <a class="header-cta" href={site.cta.href}>{site.cta.label}</a>
+  <nav class="loc-strip" aria-label="Locations">
+    {locations.map((l) => <a href={url(`${l.slug}/`)} aria-current={loc?.key === l.key ? "true" : undefined}>{l.short}</a>)}
   </nav>
-  <div class="header-right">
-    <a class="header-cta" href={site.cta.href}>{site.cta.label}</a>
-    <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+  <div class="header-row">
+    <a class="brand" href={home} aria-label={`${loc ? loc.name : "Black+Blue"}, home`}>
+      {loc?.key === "roof" ? (
+        <img class="brand-roof" src={url(loc.logo.src)} alt="The Roof at Black+Blue" width="740" height="435" />
+      ) : (
+        <>
+          <img class="brand-mono" src={url("assets/brand/monogram.png")} alt="" width="121" height="120" />
+          <span class="brand-text"><img src={url("assets/brand/wordmark.png")} alt="Black+Blue" width="292" height="37" /><small>{loc ? loc.short : "Steakhouse"}</small></span>
+        </>
+      )}
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      {nav.map((item) => <a href={item.href} aria-current={item.key === current ? "page" : undefined}>{item.label}</a>)}
+      {!loc && locations.map((l) => <a href={url(`${l.slug}/`)}>{l.short}</a>)}
+      {loc && <a class="nav-extra" href={loc.tel}>{loc.phone}</a>}
+      <a class="header-cta" href={book}>Book a Table</a>
+    </nav>
+    <div class="header-right">
+      {loc && <a class="header-cta" href={book}>Book a Table</a>}
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
+    </div>
   </div>
 </header>

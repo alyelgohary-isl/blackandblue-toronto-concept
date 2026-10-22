@@ -1,13 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { site } from "@/site.config";
+import { locations } from "@/data/locations";
 import { url, absolute } from "@/lib/url";
-import { dishes, type Dish } from "@/data/dishes";
+import { dishes, vanPrices, type Dish } from "@/data/dishes";
 
 export function getStaticPaths() {
   return dishes.map((d) => ({ params: { slug: d.slug }, props: { dish: d } }));
 }
 const { dish } = Astro.props as { dish: Dish };
+const van = vanPrices[dish.slug] ?? [];
 const others = dishes.filter((d) => d.slug !== dish.slug);
 const path = `dishes/${dish.slug}/`;
 const schema = [
@@ -18,15 +19,15 @@ const schema = [
   {
     "@context": "https://schema.org", "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
-      { "@type": "ListItem", position: 2, name: "Menu", item: absolute("menu/") },
+      { "@type": "ListItem", position: 1, name: "Black+Blue", item: absolute() },
+      { "@type": "ListItem", position: 2, name: "Menu", item: absolute("toronto/menu/") },
       { "@type": "ListItem", position: 3, name: dish.name, item: absolute(path) },
     ],
   },
 ];
 ---
 <Layout
-  title={`${dish.question.replace(/, and where can you eat it in Toronto\?/, "?")} | Black+Blue Toronto`.slice(0, 70)}
+  title={`${dish.question.replace(/, and where can you eat it in Toronto\?/, "?")} | Black+Blue`.slice(0, 70)}
   description={dish.answer.slice(0, 155)}
   path={path}
   schema={schema}
@@ -35,7 +36,7 @@ const schema = [
   <section class="page-hero">
     <div class="wrap split" style="align-items:end">
       <div>
-        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span><a href={url("menu/")}>Menu</a><span>/</span>{dish.name}</nav>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Black+Blue</a><span>/</span>{dish.name}</nav>
         <h1>{dish.question}</h1>
       </div>
       <figure class="print"><img src={url(`assets/img/${dish.img}.webp`)} alt={dish.alt} width="1600" height="1067" /></figure>
@@ -46,10 +47,13 @@ const schema = [
       <div class="answer-box"><p>{dish.answer}</p></div>
       {dish.body.map((p) => <p>{p}</p>)}
       <div class="at-bb">
-        <span class="eyebrow">At Black+Blue Toronto</span>
+        <span class="eyebrow">At Black+Blue</span>
         <p style="margin-top:1rem">{dish.atBB}</p>
-        <dl class="lot-spec" style="margin-top:1.4rem">{dish.prices.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
-        <div class="actions" style="margin-top:1.8rem"><a class="btn btn-solid" href={site.book}>Book a Table</a><a class="link-arrow" href={url("menu/#dinner")}>Dinner menu</a></div>
+        <div class="price-cols">
+          <div><span class="mono">Toronto</span><dl class="lot-spec">{dish.prices.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>
+          {van.length > 0 && <div><span class="mono">Vancouver & The Roof</span><dl class="lot-spec">{van.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>}
+        </div>
+        <div class="actions" style="margin-top:1.8rem">{locations.slice(0, 2).map((l, i) => <a class={i === 0 ? "btn btn-solid" : "btn"} href={l.book}>Book {l.short}</a>)}<a class="link-arrow" href={url("toronto/menu/#dinner")}>Toronto menu</a><a class="link-arrow" href={url("vancouver/menu/#dinner")}>Vancouver menu</a></div>
       </div>
       <h2>Questions</h2>
       <div class="faq">{dish.faqs.map(([q, a]) => <details><summary>{q}</summary><div class="answer"><p>{a}</p></div></details>)}</div>

@@ -5,7 +5,9 @@ import "../styles/style.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ActionBar from "../components/ActionBar.astro";
-import { site, type NavKey } from "../site.config";
+import { site } from "../site.config";
+import type { Location } from "../data/locations";
+import { restaurantSchema } from "../data/locations";
 import { url, absolute, SITE_URL } from "../lib/url";
 
 interface Props {
@@ -15,8 +17,10 @@ interface Props {
   description: string;
   /** Path on the production domain, e.g. "about/" ("" for home) */
   path: string;
-  /** Nav item to mark as the current page */
-  current?: NavKey;
+  /** Page to mark as current in the nav */
+  current?: string;
+  /** The location this page belongs to (header, footer, action bar, Restaurant schema) */
+  loc?: Location;
   ogImage?: string;
   /** Extra JSON-LD objects (breadcrumbs, FAQ, products…); the Organization block is always included */
   schema?: object[];
@@ -24,23 +28,17 @@ interface Props {
   variant?: "inner" | "film";
 }
 
-const { title, description, path, current, ogImage = site.ogImage, schema = [], variant = "inner" } = Astro.props;
+const { title, description, path, current, loc, ogImage = site.ogImage, schema = [], variant = "inner" } = Astro.props;
 const canonical = absolute(path);
 
-const ORGANIZATION = {
+const ORGANIZATION = loc ? restaurantSchema(loc, absolute) : {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: site.name,
+  name: "Black+Blue",
   url: SITE_URL,
-  email: site.email,
   description: site.description,
   slogan: site.tagline,
-  image: absolute(site.ogImage),
-  hasMenu: absolute("menu/"),
-  openingHoursSpecification: site.hours.filter((h) => h.spec).map((h) => ({
-    "@type": "OpeningHoursSpecification", name: h.label, dayOfWeek: h.spec!.days, opens: h.spec!.opens, closes: h.spec!.closes,
-  })),
-  ...site.schema,
+  parentOrganization: { "@type": "Organization", name: "Glowbal Restaurant Group", url: "https://www.glowbalgroup.com/" },
 };
 const { gtm, ga4, gscVerification } = site.tracking;
 const { letter, background, color } = site.favicon;
@@ -88,10 +86,10 @@ const FAVICON = "data:image/svg+xml," + encodeURIComponent(
 </head>
 <body class={variant}>
   {gtm && <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${gtm}`} height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>}
-  <Header current={current} />
+  <Header current={current} loc={loc} />
   <slot />
-  <Footer />
-  <ActionBar />
+  <Footer loc={loc} />
+  <ActionBar loc={loc} />
   <!-- public/js/config.js holds the form endpoint and reCAPTCHA key; it stays a plain, unbundled file so it is easy to find and edit -->
   <script is:inline src={url("js/config.js")}></script>
   <script>import "../scripts/site.js";</script>

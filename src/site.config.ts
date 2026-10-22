@@ -8,11 +8,11 @@ const phone = "647.368.8283";
 
 export const site = {
   /** Legal/brand name: page titles, Organization schema, footer copyright */
-  name: "Black+Blue Toronto",
+  name: "Black+Blue",
   /** Header and footer lockup: first part plain, second in the italic accent */
   brand: ["Black", "Blue"],
   /** Production domain, used for canonical and OG URLs (not where the preview is hosted) */
-  url: "https://blackandbluesteakhouse.ca/toronto",
+  url: "https://blackandbluesteakhouse.ca",
   email,
   phone,
   tel: "tel:+16473688283",

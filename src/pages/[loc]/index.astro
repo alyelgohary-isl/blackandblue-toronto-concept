@@ -1,0 +1,143 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ScrollFilm from "@/components/motion/ScrollFilm.astro";
+import { url, locHref } from "@/lib/url";
+import { locations, buildFilm, type Location } from "@/data/locations";
+
+export function getStaticPaths() {
+  return locations.map((loc) => ({ params: { loc: loc.slug }, props: { loc } }));
+}
+const { loc } = Astro.props as { loc: Location };
+const film = buildFilm(loc.film.clips);
+const h = (x: string) => locHref(loc.slug, x);
+const isBook = (l: string) => /^Book/.test(l);
+---
+<Layout title={loc.seo.title} description={loc.seo.description} path={`${loc.slug}/`} variant="film" loc={loc}>
+  <ScrollFilm
+    sources={film.sources}
+    timeline={film.timeline as never}
+    preload={[loc.film.clips[0].id, loc.film.preload]}
+    layout="plate"
+    plate={{ ratio: 2.35, maxH: 0.56, mobileRatio: 1.2 }}
+    loader={loc.key === "roof" ? "THE ROOF" : "BLACK+BLUE"}
+    headerOffset={126}
+    items=".lot-no, .lot-title, .lot-body, .lot-spec, .lot .actions"
+  >
+    <section class="band-section hero-section is-active" id="top" data-seg="hero:0,hero:1" data-animation="hero">
+      <div class="hero-inner">
+        <div>
+          <span class="eyebrow">{loc.film.heroEyebrow}</span>
+          <h1 class="hero-heading" style="margin-top:0.9rem">
+            <span class="line">{loc.film.heroTitle[0].split(" ").map((w) => <><span class="word">{w}</span> </>)}</span>
+            <span class="line">{loc.film.heroTitle[1].split(" ").map((w) => <><span class="word"><em>{w}</em></span> </>)}</span>
+          </h1>
+        </div>
+        <div class="hero-side">
+          <p class="hero-tagline">{loc.film.tagline}</p>
+          <div class="hero-ctas">
+            {loc.film.heroActions.map(([l, x], i) => <a class={i === 0 ? "btn btn-solid" : i === 1 ? "btn" : "btn btn-quiet"} href={h(x)}>{l}</a>)}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {loc.film.lots.map((lot, i) => (
+      <section class="band-section" data-seg={film.segs[i]} data-animation="fade-up">
+        <div class="lot">
+          <div class="lot-head"><span class="lot-no">{lot.no}</span><h2 class="lot-title">{lot.title[0]} <em>{lot.title[1]}</em></h2></div>
+          <p class="lot-body">{lot.body}</p>
+          <div>
+            <dl class="lot-spec">{lot.spec.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+            {lot.actions && <div class="actions">{lot.actions.map(([l, x], j) => <a class={j === 0 ? "btn btn-solid btn-sm" : "link-arrow"} href={h(x)}>{l}</a>)}</div>}
+          </div>
+        </div>
+      </section>
+    ))}
+  </ScrollFilm>
+
+  <main class="page-flow">
+    <section class="section" id="week">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><span class="eyebrow">Features</span><h2>The week at <em>{loc.key === "roof" ? "The Roof" : "Black+Blue"}</em></h2></div>
+          <p>{loc.welcome}</p>
+        </div>
+        {loc.week && (
+          <>
+            <div class="calendar reveal" role="table" aria-label="Weekly features">
+              {loc.week.map((d) => (
+                <div role="row">
+                  <span class="day" role="rowheader">{d.day}</span>
+                  <ul role="cell">{d.items.map(([t, s]) => <li>{t}{s && <small>{s}</small>}</li>)}</ul>
+                </div>
+              ))}
+            </div>
+            {loc.weekFoot && <div class="calendar-foot">{loc.weekFoot.map((t) => <span class="mono">{t}</span>)}</div>}
+          </>
+        )}
+        <div class="features">
+          {loc.features.map((f) => (
+            <article class="feature reveal">
+              <figure class="print"><img src={url(`assets/img/${f.img}.webp`)} alt={f.alt} loading="lazy" width="800" height="1000" /></figure>
+              <div class="feature-body">
+                <span class="sub">{f.sub}</span>
+                <h3>{f.title}</h3>
+                {f.confirm && <Fragment set:html={`<!-- CONFIRM: ${f.confirm} -->`} />}
+                <p>{f.body}</p>
+                <div class="actions">{f.links.map(([l, x], i) => <a class={i === 0 && isBook(l) ? "btn btn-sm" : "link-arrow"} href={h(x)}>{l}</a>)}</div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {loc.sections.map((s) => (
+      <section class="section">
+        <div class={`wrap split${s.flip ? " flip" : ""}`}>
+          <figure class="print reveal">
+            {s.loop
+              ? <video autoplay muted loop playsinline preload="metadata" poster={url(`assets/loops/${s.loop}.webp`)} aria-label={s.alt}><source src={url(`assets/loops/${s.loop}.mp4`)} type="video/mp4" /></video>
+              : <img src={url(`assets/img/${s.img}.webp`)} alt={s.alt} loading="lazy" width="1600" height="1067" />}
+          </figure>
+          <div class="reveal">
+            <span class="eyebrow">{s.eyebrow}</span>
+            <h2>{s.title[0]} <em>{s.title[1]}</em></h2>
+            {s.body.map((p) => <p>{p}</p>)}
+            <div class="actions">{s.actions.map(([l, x], i) => <a class={i === 0 ? "btn" : "link-arrow"} href={h(x)}>{l}</a>)}</div>
+          </div>
+        </div>
+      </section>
+    ))}
+
+    <section class="section tight" aria-label="Distinctions">
+      <div class="wrap">
+        {loc.distinctionsConfirm && <Fragment set:html={`<!-- CONFIRM: ${loc.distinctionsConfirm} -->`} />}
+        <div class="distinctions reveal">{loc.distinctions.map((d) => <div><strong>{d.title}</strong><span>{d.sub}</span></div>)}</div>
+      </div>
+    </section>
+
+    <section class="section" id="visit">
+      <div class="wrap">
+        <div class="section-head reveal"><div><span class="eyebrow">Visit</span><h2>{loc.visit.title[0]} <em>{loc.visit.title[1]}</em></h2></div><p>{loc.visit.note}</p></div>
+        <div class="visit">
+          <div class="reveal">
+            <h3>Contact</h3>
+            <address>{loc.address.line2 && <>{loc.address.line2}<br /></>}{loc.address.street}<br />{loc.address.city}, {loc.address.region} {loc.address.postal}</address>
+            <p style="margin-top:1rem"><a class="tel-big" href={loc.tel}>{loc.phone}</a><br /><a href={`mailto:${loc.email}`}>{loc.email}</a></p>
+            <div class="actions"><a class="btn btn-solid" href={loc.book}>Book a Table</a><a class="link-arrow" href={loc.maps}>Directions</a></div>
+          </div>
+          <div class="reveal">
+            <h3>Hours</h3>
+            <dl class="hours">{loc.hours.map((x) => <div><dt>{x.label}</dt><dd>{x.days}<span>{x.time}</span></dd></div>)}</dl>
+          </div>
+          <div class="reveal">
+            <h3>Parking</h3>
+            <div class="prose">{loc.visit.parking.map((p) => <p style="font-size:0.92rem">{p}</p>)}</div>
+            <p class="micro" style="margin-top:1.2rem">{loc.visit.access}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

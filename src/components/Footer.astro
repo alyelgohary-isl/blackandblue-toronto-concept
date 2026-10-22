@@ -1,36 +1,58 @@
 ---
+import type { Location } from "../data/locations";
+import { locations } from "../data/locations";
 import { site } from "../site.config";
 import { url } from "../lib/url";
 
+const { loc } = Astro.props as { loc?: Location };
 const year = new Date().getFullYear();
+const pages: [string, string, string][] = [["menu", "menu/", "Menu"], ["selection", "superior-selection/", "A Superior Selection"], ["private", "private-dining/", "Private Dining"], ["about", "about/", "About"], ["contact", "contact/", "Contact & Hours"]];
 ---
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-top">
-      <img class="footer-logo" src={url("assets/brand/logo-toronto.png")} alt="Black+Blue Toronto" width="150" height="125" loading="lazy" />
+      {loc?.key === "roof"
+        ? <img class="footer-logo roof" src={url("assets/brand/roof-gold.png")} alt="The Roof at Black+Blue" width="740" height="435" loading="lazy" />
+        : <img class="footer-logo" src={url(loc?.key === "vancouver" ? "assets/brand/logo-vancouver.png" : "assets/brand/logo-toronto.png")} alt={loc ? loc.name : "Black+Blue"} width="150" height="125" loading="lazy" />}
       <p class="footer-line">A Kobe-Beef Certified Restaurant</p>
     </div>
     <div class="footer-grid">
+      {loc ? (
+        <>
+          <div class="footer-col">
+            <h3>Visit</h3>
+            <address>{loc.address.line2 && <>{loc.address.line2}<br /></>}{loc.address.street}<br />{loc.address.city}, {loc.address.region} {loc.address.postal}</address>
+            <p><a href={loc.tel}>{loc.phone}</a><br /><a href={`mailto:${loc.email}`}>{loc.email}</a></p>
+            <a class="link-arrow" href={loc.maps}>Directions</a>
+          </div>
+          <div class="footer-col">
+            <h3>Hours</h3>
+            <dl class="hours-mini">{loc.hours.map((h) => <div><dt>{h.label}</dt><dd>{h.days}<br />{h.time}</dd></div>)}</dl>
+          </div>
+          <div class="footer-col">
+            <h3>{loc.short}</h3>
+            <ul>{pages.filter(([k]) => loc.pages.includes(k as never)).map(([, h, l]) => <li><a href={url(`${loc.slug}/${h}`)}>{l}</a></li>)}</ul>
+          </div>
+        </>
+      ) : (
+        locations.map((l) => (
+          <div class="footer-col">
+            <h3>{l.short}</h3>
+            <address>{l.address.line2 && <>{l.address.line2}<br /></>}{l.address.street}<br />{l.address.city}, {l.address.region}</address>
+            <p><a href={l.tel}>{l.phone}</a></p>
+          </div>
+        ))
+      )}
       <div class="footer-col">
-        <h3>Visit</h3>
-        <address>{site.address.street}<br />{site.address.city}, {site.address.region}, {site.address.postal}</address>
-        <p><a href={site.tel}>{site.phone}</a><br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
-        <a class="link-arrow" href={site.maps}>Directions</a>
+        <h3>Guests</h3>
+        <ul>
+          <li><a href={loc ? loc.book : locations[0].book}>Book a Table</a></li>
+          <li><a href="https://www.buyatab.com/gcp/accessible/?id=5194#customize">Gift Cards</a></li>
+          <li><a href="https://www.glowbalgroup.com/wine-dinner-club/">Wine Dinners</a></li>
+          <li><a href="https://www.instagram.com/bandbsteak/">Instagram</a></li>
+          <li><a href={loc ? loc.facebook : "https://www.facebook.com/blackandbluetoronto"}>Facebook</a></li>
+        </ul>
       </div>
-      <div class="footer-col">
-        <h3>Hours</h3>
-        <dl class="hours-mini">
-          {site.hours.map((h) => <div><dt>{h.label}</dt><dd>{h.days}<br />{h.time}</dd></div>)}
-        </dl>
-      </div>
-      {site.footer.columns.map((col) => (
-        <div class="footer-col">
-          <h3>{col.title}</h3>
-          <ul>
-            {col.links.map((link) => <li><a href={url(link.href)}>{link.label}</a></li>)}
-          </ul>
-        </div>
-      ))}
       <div class="footer-col footer-news">
         <h3>Newsletter</h3>
         <p>{site.footer.newsletter}</p>

@@ -1,249 +1,35 @@
 ---
+/* The group entrance, like blackandbluesteakhouse.ca/: choose a location. Each plate loops that location's own room or sign. */
 import Layout from "@/layouts/Layout.astro";
-import ScrollFilm from "@/components/motion/ScrollFilm.astro";
-import { site } from "@/site.config";
 import { url } from "@/lib/url";
-import * as film from "@/data/film";
+import { locations } from "@/data/locations";
 
-/* Copy is the client's own (blackandbluesteakhouse.ca/toronto-home/, /toronto-a-superior-selection/,
-   /toronto-private-dining/, /toronto-menu/), verbatim. Sources per line in work/copy.md. */
-const week = [
-  { day: "Mon", items: [["Lunch 45", "Prime Rib Steak Sandwich · 25"], ["Wellington Mondays", "$195 for two"]] },
-  { day: "Tue", items: [["Lunch 45", "Beef Bourguignon · 25"]] },
-  { day: "Wed", items: [["Lunch 45", "Rigatoni Bolognese · 25"]] },
-  { day: "Thu", items: [["Lunch 45", "Chopped Steak · 25"]] },
-  { day: "Fri", items: [["Burger & Beer Friday", "$25 · lunch until 2:00pm"]] },
-  { day: "Sat", items: [["Weekend Brunch", "tableside caesar & mimosa carts"]] },
-  { day: "Sun", items: [["Weekend Brunch", ""], ["Prime Rib Sundays", "$69 · from 3:00pm"]] },
-];
-const features = [
-  {
-    title: "Lunch Features | $25", sub: "Monday to Thursday  |  “Lunch 45” Menu", img: "prime-rib-sandwich", alt: "Prime rib steak sandwich at Black+Blue Toronto",
-    body: "Our “Lunch 45” menu is designed to have you in and out in just 45 minutes, Monday to Thursday. Perfect for lunch breaks or days packed with meetings, it delivers a delicious weekday lunch without the wait.",
-    links: [["Book a Table", site.book], ["View Menu", url("menu/#lunch-45")]],
-  },
-  {
-    title: "Wellington Mondays", sub: "Three-Courses | $195 for two", img: "wellington", alt: "Beef Wellington on a Black+Blue carving board",
-    body: "Mondays are looking up! Join us for a three-course menu featuring a Tableside Warm Mushroom Salad to start, followed by a perfectly prepared Wellington with classic accompaniments, and dessert to finish.",
-    links: [["Book a Table", site.book], ["View Menu", "https://blackandbluesteakhouse.ca/wp-content/uploads/2025/02/bb-to-Wellington-Mondays-2024.pdf"]],
-  },
-  {
-    title: "$25 Burger & Beer Friday", sub: "Friday lunch until 2:00pm", img: "burger", alt: "Smash burger, fries and a beer at Black+Blue Toronto",
-    body: "Enjoy the perfect Friday combo for just $25! Elevate your burger experience with additional toppings for $3.50 each including half-sliced avocado, maple smoked bacon, and sautéed mushrooms. Or make it The Ultimate for $32 by adding all three toppings.",
-    links: [["Book a Table", site.book]],
-  },
-  {
-    title: "Weekend Brunch", sub: "Sat & Sun | 11:00am – 2:00pm", img: "brunch", alt: "Weekend brunch spread at Black+Blue Toronto",
-    body: "Join us on weekends for our steakhouse brunch including tableside caesar cart and tableside mimosa cart.",
-    links: [["View Menu", url("menu/#brunch")]],
-    confirm: "Brunch start time: home page says 11:00AM, contact page says 10:30am",
-  },
-  {
-    title: "Prime Rib Sundays", sub: "$69 | Three-Courses | Every Sunday from 3:00pm", img: "prime-rib", alt: "Jus poured over prime rib with Yorkshire pudding",
-    body: "Join us every Sunday for our famous Prime Rib Dinner including Caesar salad, 10 oz Northern Gold slow-roasted Prime Rib, Yorkshire pudding, mashed potatoes, seasonal vegetables, B+B’s Signature Butter Cake!",
-    links: [["Book a Table", site.book]],
-  },
-  {
-    title: "Happy Hour", sub: "Daily | 2:30pm to 5:30pm", img: "seafood-tower", alt: "Seafood tower with east coast oysters",
-    body: "Fresh Oysters 2 per piece · Steak Tartare Bites 5.5 · Wagyu Hot Stone 34, A5 japanese wagyu cooked on a salt brick · All Beers on Tap 7 · Classic Martini 10.",
-    links: [["Happy Hour Menu", url("menu/#happy-hour")]],
-  },
-];
-const parking = [
-  "24/7 Underground parking facilities @ First Canadian Place Towers/Exchange",
-  "Access from Adelaide & York Street (119 York St)",
-  "Weekday 6am-6pm $30 · Weekday 24 Hour Rate $40",
-  "Evening Flat Rate 6pm-6am $10 · Weekend & Holidays (per 24 hours): 6am-6am $12",
-];
+const loops: Record<string, string> = { toronto: "tor-home", vancouver: "van-home", roof: "roof-home" };
+const marks: Record<string, string> = { toronto: "assets/brand/logo-toronto.png", vancouver: "assets/brand/logo-vancouver.png", roof: "assets/brand/roof-gold.png" };
 ---
 <Layout
-  title="Black+Blue Toronto | Kobe-Beef Certified Steakhouse, King St W"
-  description="Black+Blue Toronto, 130 King St West: Canada’s premier steak dining experience. Dry-aged beef, certified Kobe, A5 Wagyu, raw bar and private dining."
+  title="Black+Blue | The Golden Age of Steak · Toronto, Vancouver, The Roof"
+  description="Black+Blue, Canada’s premier steak dining experience: Kobe-Beef certified steakhouses in Toronto and Vancouver, and The Roof, Vancouver’s largest rooftop dining destination."
   path=""
-  variant="film"
 >
-  <ScrollFilm
-    sources={film.sources}
-    timeline={film.timeline}
-    preload={film.preload}
-    layout="plate"
-    plate={film.plate}
-    loader="BLACK+BLUE"
-    headerOffset={98}
-    items=".lot-no, .lot-title, .lot-body, .lot-spec, .lot .actions"
-  >
-    <section class="band-section hero-section is-active" id="top" data-seg="hero:0,hero:1" data-animation="hero">
-      <div class="hero-inner">
-        <div>
-          <span class="eyebrow">Toronto · 130 King St West</span>
-          <h1 class="hero-heading" style="margin-top:0.9rem">
-            <span class="line"><span class="word">The</span> <span class="word">Golden</span> <span class="word">Age</span></span>
-            <span class="line"><span class="word"><em>of</em></span> <span class="word"><em>Steak</em></span></span>
-          </h1>
-        </div>
-        <div class="hero-side">
-          <p class="hero-tagline">A decidedly unique dining experience</p>
-          <div class="hero-ctas">
-            <a class="btn btn-solid" href={site.book}>Book a Table</a>
-            <a class="btn" href={url("menu/")}>Menu</a>
-            <a class="btn btn-quiet" href={url("private-dining/")}>Private Dining</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="band-section" data-seg="locker:0.08,c1:0.12" data-animation="fade-up">
-      <div class="lot">
-        <div class="lot-head"><span class="lot-no">Lot 01 · The salt locker</span><h2 class="lot-title">Superior selection, <em>superior flavour</em></h2></div>
-        <p class="lot-body">The pale pink and orange wall is made of Himalayan salt bricks. The salt purifies the air and naturally removes moisture. All our steaks are kept in the cooler for 28-45 days and ensures a flavour concentration of the highest quality.</p>
-        <dl class="lot-spec">
-          <div><dt>Dry-aged</dt><dd>28 – 45 days</dd></div>
-          <div><dt>NY Striploin</dt><dd>89 (14oz)</dd></div>
-          <div><dt>Rib Eye</dt><dd>109 (14oz)</dd></div>
-          <div><dt>Cowboy Rib-Eye</dt><dd>235 (36oz)</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <section class="band-section" data-seg="kobe:0.08,c2:0.12" data-animation="fade-up">
-      <div class="lot">
-        <div class="lot-head"><span class="lot-no">Lot 02 · Hyogo, Japan</span><h2 class="lot-title">Japanese <em>Kobe Beef</em></h2></div>
-        <p class="lot-body">Black+Blue takes great pride in being one of the select few dining rooms in North America that offers certified Kobe beef ribeye and striploin cuts. The fatty “sashi” content dissolves at low temperatures, which literally means it melts in your mouth.</p>
-        <dl class="lot-spec">
-          <div><dt>Rib Eye</dt><dd>52 per oz</dd></div>
-          <div><dt>Striploin</dt><dd>56 per oz</dd></div>
-          <div><dt>Tenderloin</dt><dd>69 per oz</dd></div>
-          <div><dt>Availability</dt><dd>Limited</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <section class="band-section" data-seg="carve:0.08,c3:0.12" data-animation="fade-up">
-      <div class="lot">
-        <div class="lot-head"><span class="lot-no">Lot 03 · Canadian Prime</span><h2 class="lot-title">Beef Wellington <em>for Two</em></h2></div>
-        <p class="lot-body">mushroom duxelles, crêpe, puff pastry, truffle jus, seasonal vegetables, pommes purée</p>
-        <dl class="lot-spec">
-          <div><dt>For two</dt><dd>169</dd></div>
-          <div><dt>Wellington Mondays</dt><dd>$195 for two</dd></div>
-          <div><dt>Châteaubriand for Two</dt><dd>179 (16oz)</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <section class="band-section" data-seg="primerib:0.08,c4:0.12" data-animation="fade-up">
-      <div class="lot">
-        <div class="lot-head"><span class="lot-no">Lot 04 · Slow-roasted</span><h2 class="lot-title">Prime <em>Rib</em></h2></div>
-        <p class="lot-body">slow-roasted, yorkshire pudding, pommes purée, seasonal vegetables, red wine jus</p>
-        <dl class="lot-spec">
-          <div><dt>Prime Rib</dt><dd>78 (14oz)</dd></div>
-          <div><dt>Prime Rib Sundays</dt><dd>$69 · three courses</dd></div>
-          <div><dt>Sundays</dt><dd>from 3:00pm</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <section class="band-section" data-seg="room:0.1,end:1" data-animation="fade-up">
-      <div class="lot">
-        <div class="lot-head"><span class="lot-no">Lot 05 · 130 King St West</span><h2 class="lot-title">The <em>Restaurant</em></h2></div>
-        <p class="lot-body">Black+Blue Toronto focuses on classic steakhouse offerings with a twist, and the world’s most premium cuts of meat.</p>
-        <div>
-          <dl class="lot-spec">
-            <div><dt>Dinner</dt><dd>Daily · 3:00pm – 12:00am</dd></div>
-            <div><dt>Call</dt><dd><a href={site.tel}>{site.phone}</a></dd></div>
-          </dl>
-          <div class="actions"><a class="btn btn-solid btn-sm" href={site.book}>Book a Table</a><a class="link-arrow" href={site.tour}>Virtual Tour</a></div>
-        </div>
-      </div>
-    </section>
-  </ScrollFilm>
-
-  <main class="page-flow">
-    <section class="section" id="week">
-      <div class="wrap">
-        <div class="section-head reveal">
-          <div><span class="eyebrow">Features</span><h2>The week at <em>Black+Blue</em></h2></div>
-          <p>Welcome to Black+Blue, Canada’s premier steak dining experience. We offer the magic of the classic steak house combined with a modern and energetic twist. We take great pride in being Kobe Beef certified, in addition to offering our guests a selection of the world’s rarest cuts.</p>
-        </div>
-        <div class="calendar reveal" role="table" aria-label="Weekly features">
-          {week.map((d) => (
-            <div role="row">
-              <span class="day" role="rowheader">{d.day}</span>
-              <ul role="cell">{d.items.map(([t, s]) => <li>{t}{s && <small>{s}</small>}</li>)}</ul>
-            </div>
-          ))}
-        </div>
-        <div class="calendar-foot">
-          <span class="mono">Happy Hour · Daily · 2:30pm – 5:30pm</span>
-          <span class="mono">Lunch Mon – Fri · Dinner nightly from 3:00pm</span>
-        </div>
-
-        <div class="features">
-          {features.map((f) => (
-            <article class="feature reveal">
-              <figure class="print"><img src={url(`assets/img/${f.img}.webp`)} alt={f.alt} loading="lazy" width="800" height="1000" /></figure>
-              <div class="feature-body">
-                <span class="sub">{f.sub}</span>
-                <h3>{f.title}</h3>
-                {f.confirm && <Fragment set:html={`<!-- CONFIRM: ${f.confirm} -->`} />}
-                <p>{f.body}</p>
-                <div class="actions">{f.links.map(([l, h], i) => <a class={i === 0 && l === "Book a Table" ? "btn btn-sm" : "link-arrow"} href={h}>{l}</a>)}</div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="events">
-      <div class="wrap split">
-        <figure class="print reveal"><img src={url("assets/img/private-room.webp")} alt="The private dining room at Black+Blue Toronto, red velvet chairs and the wine wall" loading="lazy" width="1600" height="1084" /></figure>
-        <div class="reveal">
-          <span class="eyebrow">Events & Private Dining</span>
-          <h2>Explore Our Holiday <em>Event Options</em></h2>
-          <p>Discover private dining rooms, semi-private spaces and full restaurant buyouts for corporate holiday parties, team dinners, client receptions, holiday lunches and year-end celebrations.</p>
-          <p>Our venue offers a variety of elegant dining spaces, including intimate private rooms for up to 16 and 32 guests, versatile mezzanine and garden patio options for larger gatherings, and full restaurant buyouts accommodating up to 350 guests.</p>
-          <div class="actions">
-            <a class="btn" href={url("private-dining/")}>Group Event Booking</a>
-            <a class="link-arrow" href="https://glowbalgroup.com/holiday-events/toronto/black-blue/">Holiday Details</a>
-            <a class="link-arrow" href="https://blackandbluesteakhouse.ca/wp-content/uploads/2026/09/BB-TO-Group-Menus-2026-5.pdf">Group Menus</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section tight" aria-label="Distinctions">
-      <div class="wrap">
-        <!-- CONFIRM: which of these distinctions apply to the Toronto room (the live Toronto home shows all of them, plus "#1 in Vancouver") -->
-        <div class="distinctions reveal">
-          <div><strong>Kobe-Beef Certified</strong><span>Canada</span></div>
-          <div><strong>Top 10% of Restaurants</strong><span>Worldwide</span></div>
-          <div><strong>Travellers’ Choice</strong><span>Tripadvisor · 2021</span></div>
-          <div><strong>Award of Excellence</strong><span>DiRōNA</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="visit">
-      <div class="wrap">
-        <div class="section-head reveal"><div><span class="eyebrow">Visit</span><h2>130 King St <em>West</em></h2></div><p>In the Exchange Tower, in the heart of the Financial District.</p></div>
-        <div class="visit">
-          <div class="reveal">
-            <h3>Contact</h3>
-            <address>{site.address.street}<br />Toronto, ON, {site.address.postal}</address>
-            <p style="margin-top:1rem"><a class="tel-big" href={site.tel}>{site.phone}</a><br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
-            <div class="actions"><a class="btn btn-solid" href={site.book}>Book a Table</a><a class="link-arrow" href={site.maps}>Directions</a></div>
-          </div>
-          <div class="reveal">
-            <h3>Hours</h3>
-            <dl class="hours">{site.hours.map((h) => <div><dt>{h.label}</dt><dd>{h.days}<span>{h.time}</span></dd></div>)}</dl>
-          </div>
-          <div class="reveal">
-            <h3>Parking</h3>
-            <div class="prose">{parking.map((p) => <p style="font-size:0.92rem">{p}</p>)}</div>
-            <p class="micro" style="margin-top:1.2rem">The main floor of the restaurant is fully accessible, including both entrances, the garden patio and access to restrooms. The second-floor mezzanine can be accessed by stairs only.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+<main class="page chooser">
+  <section class="chooser-head wrap">
+    <span class="eyebrow">A Glowbal Restaurant Group dining destination</span>
+    <h1>The Golden Age <em>of Steak</em></h1>
+    <p class="lede">Black+Blue is Canada’s premier steak dining experience with locations in Vancouver and Toronto offering the magic of a classic steak house combined with a modern and energetic ambiance.</p>
+  </section>
+  <section class="wrap chooser-grid">
+    {locations.map((l) => (
+      <a class="chooser-card" href={url(`${l.slug}/`)}>
+        <figure class="print">
+          <img src={url(`assets/loops/${loops[l.key]}.webp`)} alt="" width="1600" height="900" />
+          <video autoplay muted loop playsinline preload="metadata" poster={url(`assets/loops/${loops[l.key]}.webp`)} aria-hidden="true"><source src={url(`assets/loops/${loops[l.key]}.mp4`)} type="video/mp4" /></video>
+        </figure>
+        <img class={`chooser-mark${l.key === "roof" ? " roof" : ""}`} src={url(marks[l.key])} alt={l.name} width="300" height="250" loading="lazy" />
+        <span class="chooser-meta">{l.address.line2 ? `${l.address.line2} · ` : ""}{l.address.street}, {l.address.city}</span>
+        <span class="link-arrow">Enter {l.short}</span>
+      </a>
+    ))}
+  </section>
+</main>
 </Layout>

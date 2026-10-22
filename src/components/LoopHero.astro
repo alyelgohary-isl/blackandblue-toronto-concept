@@ -1,0 +1,20 @@
+---
+/* Inner-page hero: a muted looping video (the client's photo in motion) inside the gold-matted plate,
+   with the page title and lede beneath. Plays on its own; nothing is tied to scroll.
+   Loops are forward-then-reverse encodes (tools/pingpong.sh) or cuts of the client's own films, in public/assets/loops/. */
+import { url } from "../lib/url";
+
+interface Props {
+  loop: string;
+  label: string;
+}
+const { loop, label } = Astro.props;
+const poster = url(`assets/loops/${loop}.webp`);
+---
+<section class="loop-hero">
+  <div class="loop-plate">
+    <img src={poster} alt={label} width="1600" height="900" fetchpriority="high" />
+    <video autoplay muted loop playsinline preload="auto" poster={poster} aria-hidden="true"><source src={url(`assets/loops/${loop}.mp4`)} type="video/mp4" /></video>
+  </div>
+  <div class="wrap-full"><div class="scrub-copy"><slot /></div></div>
+</section>
