@@ -487,7 +487,7 @@ body.nav-open .nav-toggle span::after { transform: translateY(-6px) rotate(-45de
   .form .row { grid-template-columns: 1fr; }
   .sticky { position: static; }
   .loop-hero { padding-top: calc(var(--header-h) + 14px); }
-  .loop-plate { height: 40vh; outline-offset: 6px; }
+  .loop-plate { height: auto; min-height: 0; aspect-ratio: 4 / 3; outline-offset: 6px; }   /* a near-square box cropped the 16:9 loops to texture */
   .scrub-copy { margin-top: 22px; gap: 0.6rem; }
   .scrub-copy h1 { font-size: clamp(2rem, 9vw, 2.6rem); }
   .scrub-copy .lede { font-size: 0.92rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }

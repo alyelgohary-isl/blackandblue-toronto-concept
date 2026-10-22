@@ -7,14 +7,17 @@ import { url } from "../lib/url";
 interface Props {
   loop: string;
   label: string;
+  /** CSS object-position: where a narrow (phone) plate crops the 16:9 loop. Default centre. */
+  focus?: string;
 }
-const { loop, label } = Astro.props;
+const { loop, label, focus } = Astro.props;
+const fit = focus ? `object-position: ${focus}` : undefined;
 const poster = url(`assets/loops/${loop}.webp`);
 ---
 <section class="loop-hero">
   <div class="loop-plate">
-    <img src={poster} alt={label} width="1600" height="900" fetchpriority="high" />
-    <video autoplay muted loop playsinline preload="auto" poster={poster} aria-hidden="true"><source src={url(`assets/loops/${loop}.mp4`)} type="video/mp4" /></video>
+    <img src={poster} alt={label} width="1600" height="900" fetchpriority="high" style={fit} />
+    <video autoplay muted loop playsinline preload="auto" poster={poster} aria-hidden="true" style={fit}><source src={url(`assets/loops/${loop}.mp4`)} type="video/mp4" /></video>
   </div>
   <div class="wrap-full"><div class="scrub-copy"><slot /></div></div>
 </section>

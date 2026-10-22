@@ -18,7 +18,7 @@ const isBook = (l: string) => /^Book/.test(l);
     timeline={film.timeline as never}
     preload={[loc.film.clips[0].id, loc.film.preload]}
     layout="plate"
-    plate={{ ratio: 2.35, maxH: 0.56, mobileRatio: 1.2 }}
+    plate={{ ratio: 2.35, maxH: 0.56, mobileRatio: 4 / 3 }}
     loader={loc.key === "roof" ? "THE ROOF" : "BLACK+BLUE"}
     headerOffset={126}
     items=".lot-no, .lot-title, .lot-body, .lot-spec, .lot .actions"

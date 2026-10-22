@@ -22,7 +22,7 @@ const schema = [{ "@context": "https://schema.org", "@type": "BreadcrumbList", i
   path={path} current="selection" schema={schema} loc={loc}
 >
 <main class="page">
-  <LoopHero loop={hero.loop} label={hero.label}>
+  <LoopHero loop={hero.loop} label={hero.label} focus={hero.focus}>
     <div>
       <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url(`${loc.slug}/`)}>{loc.short}</a><span>/</span>A Superior Selection</nav>
       <h1 style="margin-top:1rem">{hero.title[0]} <em>{hero.title[1]}</em></h1>

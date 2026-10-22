@@ -11,7 +11,7 @@ export type Hours = { label: string; days: string; time: string; spec: { days: s
 export type Clip = { id: string; dir: string; prefix: string; count: number; fx?: number; fy?: number; units?: number };
 export type Lot = { no: string; title: [string, string]; body: string; spec: Pair[]; actions?: [string, string][] };
 export type Feature = { title: string; sub: string; img: string; alt: string; body: string; links: [string, string][]; confirm?: string };
-export type Hero = { loop: string; title: [string, string]; lede: string; actions?: [string, string][]; label: string };
+export type Hero = { loop: string; title: [string, string]; lede: string; actions?: [string, string][]; label: string; focus?: string };   // focus: CSS object-position, for where a phone crops the loop
 export type PageKey = "menu" | "selection" | "private" | "about" | "contact";
 
 export type Location = {

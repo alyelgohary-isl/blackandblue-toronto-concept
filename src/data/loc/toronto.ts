@@ -30,10 +30,10 @@ export const toronto: Location = {
   },
   film: {
     clips: [
-      { id: "locker", dir: "frames/locker", prefix: "lo_", count: 61, fy: 0.46 },     // their salt-locker photo (prime.jpg): slow push-in
-      { id: "kobe", dir: "frames/kobe", prefix: "ko_", count: 61, fx: 0.56, fy: 0.58 }, // their Kobe striploin with the certificate
+      { id: "locker", dir: "frames/locker", prefix: "lo_", count: 61, fy: 0.46 },     // their salt-locker photo (prime.jpg): code-made push-in (work/camera.py), the Kling clip reshaped the racks
+      { id: "kobe", dir: "frames/kobe", prefix: "ko_", count: 61, fx: 0.56, fy: 0.58 }, // their Kobe striploin with the certificate: code-made push-in, the Kling clip re-formed the marbling
       { id: "carve", dir: "frames/carve", prefix: "ca_", count: 41, fy: 0.52 },       // the chef carving the Wellington; frames 41–60 rearranged the pastry, cut
-      { id: "primerib", dir: "frames/primerib", prefix: "pr_", count: 61, fy: 0.42 }, // the jus pour (BB.jpg, sharpened)
+      { id: "primerib", dir: "frames/primerib", prefix: "pr_", count: 46, fy: 0.42 }, // the jus pour (BB.jpg, sharpened); frames 47–61 bent the gravy boat, cut
       { id: "room", dir: "frames/room", prefix: "ro_", count: 61, units: 0.9 },       // the room (blackblue-tor.jpg, sharpened)
     ],
     preload: 18,
@@ -100,7 +100,7 @@ export const toronto: Location = {
   },
   heroes: {
     menu: { loop: "tor-menu", title: ["Menus", ""], label: "Sliced steak on a silver platter, steam rising from copper pots of sides", lede: "Classic steakhouse offerings with a twist, and the world’s most premium cuts of meat. Dinner nightly from 3:00pm; lunch Monday to Friday; brunch on weekends." },
-    selection: { loop: "striploin", title: ["Superior selection,", "superior flavour"], label: "The camera moves across a marbled Wagyu striploin", lede: "We proudly display our beef in the centre of the dining room. The pale pink and orange wall is made of Himalayan salt bricks. The salt purifies the air and naturally removes moisture." },
+    selection: { loop: "striploin", focus: "12% 50%", title: ["Superior selection,", "superior flavour"], label: "The camera moves across a marbled Wagyu striploin", lede: "We proudly display our beef in the centre of the dining room. The pale pink and orange wall is made of Himalayan salt bricks. The salt purifies the air and naturally removes moisture." },
     private: { loop: "tor-private", title: ["Events &", "Private Dining"], label: "The camera moves slowly down the long private dining table toward the wine wall", lede: "Intimate private rooms for up to 16 and 32 guests, versatile mezzanine and garden patio options for larger gatherings, and full restaurant buyouts accommodating up to 350 guests.", actions: [["Event Request", "#inquiry"], ["Group Menus", groupMenus]] },
     about: { loop: "tor-about", title: ["Welcome!", "The Golden Age of Steak"], label: "The Black+Blue sign on King St West, from afternoon to dusk as the gold letters light up", lede: "Black+Blue is Canada’s premier steak dining experience with locations in Vancouver and Toronto offering the magic of a classic steak house combined with a modern and energetic ambiance.", actions: [["Virtual Tour", tour], ["Book a Table", book]] },
     contact: { loop: "tor-contact", title: ["Contact", "& Hours"], label: "The camera moves slowly through the garden dining room under hanging greenery", lede: "130 King St West, Toronto, ON, M5X 2A2 · 647.368.8283 · info@blackandbluetoronto.com" },

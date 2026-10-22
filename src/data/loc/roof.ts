@@ -29,7 +29,7 @@ export const roof: Location = {
       { id: "rgarden", dir: "frames/roof_garden", prefix: "rg_", count: 61, fy: 0.55 },  // their terrace photo (img4.jpg, sharpened): push-in under the greenery
       { id: "rheaters", dir: "frames/roof_heaters", prefix: "rh_", count: 61, fy: 0.5 }, // the patio heaters (img3-1.jpg, sharpened): flames flicker
       { id: "rtacos", dir: "frames/roof_tacos", prefix: "rt_", count: 61, fy: 0.5 },     // Lunch 45 salmon tacos (bb-2.jpg, sharpened): lime squeezed
-      { id: "rbull", dir: "frames/roof_bull", prefix: "rb_", count: 61, fy: 0.25 },      // the bronze bull (2J6A9092.jpg): slow push-in
+      { id: "rbull", dir: "frames/roof_bull", prefix: "rb_", count: 61, fy: 0.25 },      // the bronze bull (2J6A9092.jpg): code-made push-in, the Kling clip reshaped the head
       { id: "rskyline", dir: "frames/roof_skyline", prefix: "rs_", count: 61, units: 0.9 }, // the terrace from afternoon to night (img4-1.jpg → night edit)
     ],
     preload: 18,
@@ -80,7 +80,7 @@ export const roof: Location = {
   visit: { title: ["The Roof |", "Third Floor"], note: "1032 Alberni St, Vancouver, BC V6E 1A3", parking: vanParking, access: "Yes, there is an elevator that serves all levels of the restaurant." },
   heroes: {
     menu: { loop: "roof-menu", title: ["The Roof", "Menus"], label: "From The Roof film: the city from the terrace, the bronze bull, steak over the Josper flames", lede: "A menu with generous cuts of prime meats, skewered fish, seafood and poultry cooked over wood coals in Canada’s first-of-its-kind Josper Grill." },
-    selection: { loop: "striploin", title: ["Superior selection,", "superior flavour"], label: "The camera moves across a marbled Wagyu striploin", lede: "We proudly display our beef in the centre of the dining room. The pale pink and orange wall is made of Himalayan salt bricks. The salt purifies the air and naturally removes moisture." },
+    selection: { loop: "striploin", focus: "12% 50%", title: ["Superior selection,", "superior flavour"], label: "The camera moves across a marbled Wagyu striploin", lede: "We proudly display our beef in the centre of the dining room. The pale pink and orange wall is made of Himalayan salt bricks. The salt purifies the air and naturally removes moisture." },
     private: { loop: "roof-private", title: ["Events &", "Private Dining"], label: "A slow move under the hanging greenery on The Roof", lede: "Please note all groups of 7 guests or larger must select a Group Set Menu. For groups of 6 guests or smaller, please make a regular dining room reservation.", actions: [["Event Request", "#inquiry"], ["Group Menus", groupMenus]] },
     contact: { loop: "roof-contact", title: ["Contact", "& Hours"], label: "Flames of the fire feature beside a table on The Roof", lede: "The Roof | Third Floor · 1032 Alberni St, Vancouver, BC V6E 1A3 · 604 637 0777" },
   },

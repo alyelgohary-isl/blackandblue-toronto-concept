@@ -48,8 +48,8 @@ export const vancouver: Location = {
   },
   film: {
     clips: [
-      { id: "vlocker", dir: "frames/van_locker", prefix: "vl_", count: 61, fy: 0.45 },     // their porterhouse in the salt locker (prime2.jpg): push-in
-      { id: "vwagyu", dir: "frames/striploin", prefix: "st_", count: 61, fy: 0.5 },        // their Wagyu striploin (kobe-2.jpg), also on /van-a-superior-selection/
+      { id: "vlocker", dir: "frames/van_locker", prefix: "vl_", count: 61, fy: 0.45 },     // their porterhouse in the salt locker (prime2.jpg): code-made push-in (work/camera.py), the Kling clip reshaped the bone
+      { id: "vwagyu", dir: "frames/striploin", prefix: "st_", count: 61, fx: 0.3, fy: 0.5 }, // their Wagyu striploin (kobe-2.jpg): code-made glide, the Kling clip re-formed the marbling; fx keeps the Black+Blue tag in the phone crop
       { id: "vlandsea", dir: "frames/van_landsea", prefix: "vs_", count: 61, fy: 0.5 },    // Land & Sea Mondays (land-sea.jpg): jus over the steak
       { id: "vprimerib", dir: "frames/van_primerib", prefix: "vp_", count: 61, fy: 0.45 }, // prime rib happy hour (bb-1.jpg, sharpened): the jus pour
       { id: "vroom", dir: "frames/van_room", prefix: "vr_", count: 61, units: 0.9 },       // the dining room at night (blackblue-van.jpg, sharpened)

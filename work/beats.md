@@ -24,3 +24,10 @@ Inner-page ScrubHeroes (61 frames each):
 | /contact/ | DSC_9349 garden patio room | slow dolly, leaves sway | 90 |
 
 Total planned: 10 clips × 90 + 3 stills × 12 = **936 credits** (balance 8,542 at start).
+
+## 2026-10-22 — morphing clips replaced, shake fixes
+
+- Code-made camera moves on the client's own photos (`work/camera.py`: eased push-in/pan, Lanczos from a float crop box, ends pulled inside the frame so nothing clamps mid-move) replace five Kling clips that changed the subject: **locker** (racks reshaped), **kobe** (marbling re-formed, plus up to 7 px wobble), **van_locker** (porterhouse bone reshaped), **striploin** (marbling re-formed; also re-encoded as `loops/striploin.mp4`), **roof_bull** (head reshaped, 4 px wobble). Same frame counts, names and size; `loops/van-selection.mp4` re-encoded from the new van_locker move.
+  - locker `--from 0.5,0.5,1.0 --to 0.47,0.52,1.14` · kobe `0.56,0.5,1.02 → 0.44,0.6,1.16` · van_locker `0.5,0.5,1.0 → 0.44,0.5,1.12` · striploin `0.42,0.42,1.08 → 0.58,0.56,1.2` · roof_bull `0.5,0.5,1.0 → 0.5,0.4,1.12` (61 frames, 1600×900, q62; loops 121 frames q90 → pingpong.sh).
+- **primerib** trimmed to 46 frames: after ~frame 46 the gravy boat bends and floats.
+- Film engine (scroll-film.js): canvas sized from its 100lvh wrapper and only redrawn when that size really changes, `ScrollTrigger.config({ ignoreMobileResize: true })`, so the iOS URL bar no longer jolts the picture; adjacent frames of the same clip cross-fade by the scroll fraction, drawn once per animation frame, so slow scrolls glide instead of stepping.

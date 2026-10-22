@@ -11,6 +11,9 @@ import { smoothScroll } from "./smooth-scroll.js";
 import { framePath, loadImage } from "./frames.js";
 
 gsap.registerPlugin(ScrollTrigger);
+/* Phones: the URL bar collapsing resizes the window. Don't re-measure the runway for it (a refresh
+   jumps the progress, so the film lurches); width changes and rotation still refresh. */
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 document.querySelectorAll("[data-scroll-film]").forEach((root) => initScrollFilm(root, JSON.parse(root.dataset.config)));
 
@@ -27,10 +30,11 @@ function initScrollFilm(root, cfg) {
      Band sections reference segments by id: data-seg="clip1:0.15,clip1:0.95". */
   const FILES = [];
   const FOCUS = [];   // per-frame focal point for the plate crop: [fx, fy] in 0..1
+  const CLIP = [];    // per-frame source key: frames only blend with a neighbour from the same clip
   const OFFSET = {};
   for (const [key, src] of Object.entries(cfg.sources)) {
     OFFSET[key] = FILES.length;
-    for (let i = 0; i < src.count; i++) { FILES.push(framePath(src.dir + src.prefix, i, src.ext)); FOCUS.push([src.fx ?? 0.5, src.fy ?? 0.5]); }
+    for (let i = 0; i < src.count; i++) { FILES.push(framePath(src.dir + src.prefix, i, src.ext)); FOCUS.push([src.fx ?? 0.5, src.fy ?? 0.5]); CLIP.push(key); }
   }
   const F = ([src, i]) => {
     if (!(src in OFFSET)) console.warn("scroll film: unknown source", src);
@@ -78,14 +82,23 @@ function initScrollFilm(root, cfg) {
   const canvas = root.querySelector(".canvas-wrap canvas");
   const ctx = canvas.getContext("2d");
   const frames = new Array(FRAME_COUNT).fill(null);
-  let currentFrame = 0;
+  let currentFrame = 0;   // integer frame on screen (QA hook, streaming)
   let dpr = 1;
 
+  /* The canvas is sized from its wrapper, which is 100lvh tall (ScrollFilm.astro): the largest
+     viewport, so the iOS URL bar showing or hiding never changes it and the picture never moves.
+     Returns false when nothing changed, so a toolbar resize costs nothing. */
+  const wrap = canvas.parentElement;
+  let sizedW = 0, sizedH = 0, sizedDpr = 0;
   function sizeCanvas() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.round(window.innerWidth * dpr);
-    canvas.height = Math.round(window.innerHeight * dpr);
+    const w = wrap.clientWidth || window.innerWidth, h = wrap.clientHeight || window.innerHeight;
+    const d = Math.min(window.devicePixelRatio || 1, 2);
+    if (w === sizedW && h === sizedH && d === sizedDpr) return false;
+    sizedW = w; sizedH = h; sizedDpr = dpr = d;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
     publishSquareRect();
+    return true;
   }
 
   /* Frame placement. The film is square; the page is not. On landscape
@@ -204,14 +217,29 @@ function initScrollFilm(root, cfg) {
     ctx.fillRect(0, 0, edge * 1.35, ch);
   }
 
-  function drawFrame(index, alpha = 1) {
+  /* Draw the film at a fractional frame position: the frame below at `alpha`, and the next frame
+     of the same clip over it at alpha × fraction, so a slow scroll glides instead of stepping. */
+  function drawFrame(pos, alpha = 1) {
+    const index = Math.floor(pos);
     let img = frames[index];
     for (let k = index; !img && k >= 0; k--) img = frames[k];   // nearest frame already loaded
     const cw = canvas.width, ch = canvas.height;
     ctx.fillStyle = ground;
     ctx.fillRect(0, 0, cw, ch);
     if (!img || alpha <= 0) return;
-    ctx.globalAlpha = Math.min(1, alpha);
+    const a = Math.min(1, alpha);
+    ctx.globalAlpha = a;
+    placeFrame(img, index, true);
+    const frac = pos - index, next = frames[index + 1];
+    if (frac > 0.02 && img === frames[index] && next && CLIP[index + 1] === CLIP[index]) {
+      ctx.globalAlpha = a * frac;
+      placeFrame(next, index + 1, false);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function placeFrame(img, index, first) {
+    const cw = canvas.width, ch = canvas.height;
     if (plate) {
       const iw = img.naturalWidth, ih = img.naturalHeight;
       const r = plateRect();
@@ -223,7 +251,6 @@ function initScrollFilm(root, cfg) {
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
       ctx.drawImage(img, sx, sy, sw, sh, r.dx, r.dy, r.dw, r.dh);
-      ctx.globalAlpha = 1;
       return;
     }
     if (bleed) {
@@ -244,11 +271,10 @@ function initScrollFilm(root, cfg) {
             g.addColorStop(0, ground); g.addColorStop(1, "rgba(0,0,0,0)");
             ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), r.dy, Math.abs(x1 - x0), r.dh);
           }
-        } else {
+        } else if (first) {
           drawScrim();
         }
       }
-      ctx.globalAlpha = 1;
       return;
     }
     const { dx, dy, dw, dh } = frameRect();
@@ -259,7 +285,6 @@ function initScrollFilm(root, cfg) {
     ctx.imageSmoothingQuality = "high";
     ctx.drawImage(img, dx, dy, dw, dh);
     ctx.restore();
-    ctx.globalAlpha = 1;
   }
 
   /* Inside a cut segment: which frame to show and how strongly (the outgoing frame fades over
@@ -277,10 +302,20 @@ function initScrollFilm(root, cfg) {
     for (const s of TIMELINE) {
       if (p >= s.p0 && p <= s.p1) {
         const t = s.p1 === s.p0 ? 0 : (p - s.p0) / (s.p1 - s.p0);
-        return Math.round(s.f0 + t * (s.f1 - s.f0));
+        return s.f0 + t * (s.f1 - s.f0);
       }
     }
     return p < 0 ? 0 : FRAME_COUNT - 1;
+  }
+
+  /* One draw per animation frame, whatever the number of scroll updates in between */
+  let drawPos = 0, drawAlpha = 1, drawQueued = false;
+  function requestDraw(pos, alpha = 1) {
+    drawPos = pos; drawAlpha = alpha;
+    currentFrame = Math.round(pos);
+    if (drawQueued) return;
+    drawQueued = true;
+    requestAnimationFrame(() => { drawQueued = false; drawFrame(drawPos, drawAlpha); });
   }
 
   /* ——— Preloader ——— */
@@ -308,7 +343,7 @@ function initScrollFilm(root, cfg) {
     if (nextToLoad >= FRAME_COUNT) return;
     const i = nextToLoad++;
     loadFrame(i).then(() => {
-      if (i === currentFrame) requestAnimationFrame(() => drawFrame(currentFrame));
+      if (i === Math.floor(drawPos) || i === Math.floor(drawPos) + 1) requestDraw(drawPos, drawAlpha);
       loadNext();
     });
   }
@@ -493,7 +528,6 @@ function initScrollFilm(root, cfg) {
   /* ——— Master scroll binding ——— */
 
   const runway = root.querySelector(".film-runway");
-  let inCut = false;
 
   ScrollTrigger.create({
     trigger: runway,
@@ -503,17 +537,8 @@ function initScrollFilm(root, cfg) {
     onUpdate(self) {
       const p = self.progress;
       const c = cutAt(p);
-      if (c) {
-        currentFrame = c.frame;
-        requestAnimationFrame(() => drawFrame(currentFrame, c.alpha));
-      } else {
-        const index = progressToFrame(p);
-        if (index !== currentFrame || inCut) {
-          currentFrame = index;
-          requestAnimationFrame(() => drawFrame(currentFrame));
-        }
-      }
-      inCut = !!c;
+      if (c) requestDraw(c.frame, c.alpha);
+      else requestDraw(progressToFrame(p));
       updateCut(c);
       updateBand(p);
       updateOverlay(p);
@@ -558,8 +583,7 @@ function initScrollFilm(root, cfg) {
   /* ——— Resize ——— */
 
   window.addEventListener("resize", () => {
-    sizeCanvas();
-    drawFrame(currentFrame);
+    if (sizeCanvas()) drawFrame(drawPos, drawAlpha);
   });
 
   /* ——— QA hook: ?p=0.42 jumps straight to that film progress after preload ——— */
